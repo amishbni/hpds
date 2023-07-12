@@ -3,3 +3,6 @@
 
 # IDE directory
 /.idea
+
+# Database file
+*.db
