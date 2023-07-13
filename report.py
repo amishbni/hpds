@@ -5,6 +5,7 @@ from celery_app import app
 
 class RamUsage:
     DB_NAME = "ram_usage"
+    DEFAULT_LIMIT = 10
 
     def __init__(self, db_name=None):
         self.db_name = db_name or self.DB_NAME
@@ -31,8 +32,8 @@ class RamUsage:
             [ram.used, ram.free, ram.total],
         )
 
-    def get_ram_stats(self):
-        result = self.db.select(self.db_name)
+    def get_ram_stats(self, limit=DEFAULT_LIMIT):
+        result = self.db.select(self.db_name, limit=limit)
         return result
 
 
