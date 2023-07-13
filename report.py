@@ -1,29 +1,35 @@
 import psutil
 from database import DatabaseManager
+from celery_app import app
 
 
-DB_NAME = "ram_usage"
-DEFAULT_LIMIT = 10
+class RamUsage:
+    DB_NAME = "ram_usage"
+
+    def __init__(self, db_name=None):
+        self.db_name = db_name or self.DB_NAME
+        self.db = DatabaseManager(self.db_name)
+        self.create_table_if_not_exists()
+
+    def create_table_if_not_exists(self):
+        self.db.create_table(
+            self.db_name,
+            [
+                "id integer primary key autoincrement",
+                "used integer not null",
+                "free integer not null",
+                "total integer not null",
+            ]
+        )
+
+    def report_ram_stats(self):
+        ram = psutil.virtual_memory()
+
+        self.db.insert(
+            self.db_name,
+            ["used", "free", "total"],
+            [ram.used, ram.free, ram.total],
+        )
 
 
-db = DatabaseManager(DB_NAME)
-db.create_table(
-    DB_NAME,
-    [
-        "id integer primary key autoincrement",
-        "used integer not null",
-        "free integer not null",
-        "total integer not null",
-    ]
-)
-
-ram = psutil.virtual_memory()
-
-db.insert(
-    DB_NAME,
-    ["used", "free", "total"],
-    [ram.used, ram.free, ram.total],
-)
-
-result = db.select(DB_NAME, columns=["used", "free", "total"], limit=DEFAULT_LIMIT)
-print(result)
+ram_usage_instance = RamUsage()
