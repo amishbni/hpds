@@ -6,3 +6,6 @@
 
 # virtual environment
 venv/
+
+# db files
+*.db
