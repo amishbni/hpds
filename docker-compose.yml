@@ -1,7 +1,17 @@
 version: '3.3'
 
 services:
-  cache:
+  api:
+    build: .
+    container_name: api
+    entrypoint: uvicorn
+    command: api.api:app --host 0.0.0.0 --port 8000
+    ports:
+      - '8000:8000'
+    networks:
+      - dnet
+
+  redis:
     image: redis:7
     networks:
       - dnet
@@ -10,11 +20,40 @@ services:
       - '6379:6379'
     command: redis-server --save 20 1 --loglevel warning
     volumes:
-      - cache:/data
+      - data:/data
+
+  celery-worker:
+      build: .
+      container_name: celery-worker
+      entrypoint: celery
+      command: -A celery_app.app worker -l info
+      volumes:
+      - .:/celery/worker
+      links:
+      - redis
+      depends_on:
+      - redis
+      networks:
+      - dnet
+
+  celery-beat:
+      build: .
+      container_name: celery-beat
+      entrypoint: celery
+      command: -A celery_app.app beat -l info
+      volumes:
+      - .:/celery/beat
+      links:
+      - celery-worker
+      - redis
+      depends_on:
+      - celery-worker
+      - redis
+      networks:
+      - dnet
 
 volumes:
   data:
-  cache:
     driver: local
 
 
