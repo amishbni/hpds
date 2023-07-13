@@ -24,6 +24,9 @@ class RamUsage:
             ]
         )
 
+    def drop_table_if_exists(self):
+        self.db.drop_table(self.db_name)
+
     def set_ram_stats(self):
         ram = psutil.virtual_memory()
 

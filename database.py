@@ -25,6 +25,13 @@ class DatabaseManager:
 
         self.query(query)
 
+    def drop_table(self, table_name):
+        query = (
+            f"drop table if exists {table_name};"
+        )
+
+        self.query(query)
+
     def insert(self, table_name, columns, values):
         query = (
             f"insert into {table_name} "
