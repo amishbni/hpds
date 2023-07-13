@@ -12,3 +12,6 @@ __pycache__/
 
 # .env file
 .env
+
+# celerybeat-schedule
+celerybeat-schedule
