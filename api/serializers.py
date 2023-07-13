@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 
-class RamUsage(BaseModel):
+class RamUsageSerializer(BaseModel):
     id: int
     used: int
     free: int

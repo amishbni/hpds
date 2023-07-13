@@ -3,9 +3,10 @@ from typing import List, Annotated
 from functools import lru_cache
 from fastapi import FastAPI, Depends, HTTPException, status, Request
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
-from report import ram_usage_instance
-from serializers import RamUsage
 from dotenv import load_dotenv
+
+from report.models import ram_usage_instance
+from api.serializers import RamUsageSerializer
 
 
 app = FastAPI()
@@ -41,7 +42,7 @@ def authenticated(
     return username
 
 
-@app.get("/ram_usage/", response_model=List[RamUsage])
+@app.get("/ram_usage/", response_model=List[RamUsageSerializer])
 async def ram_usage(
         request: Request,
         _username: str = Depends(authenticated),
@@ -50,7 +51,7 @@ async def ram_usage(
     limit = params.get("limit", ram_usage_instance.DEFAULT_LIMIT)
     stats = ram_usage_instance.get_ram_stats(limit=limit)
     result = [
-        RamUsage.model_validate(
+        RamUsageSerializer.model_validate(
             {
                 "id": stat[0],
                 "used": stat[1],

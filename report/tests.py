@@ -1,4 +1,4 @@
-from report import RamUsage
+from report.models import RamUsage
 
 
 def test_set_and_get_ram_stats():

@@ -1,6 +1,5 @@
 import psutil
 from database import DatabaseManager
-from celery_app import app
 
 
 class RamUsage:
