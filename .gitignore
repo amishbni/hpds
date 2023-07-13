@@ -9,3 +9,6 @@
 
 # __pycache__ directories
 __pycache__/
+
+# .env file
+.env
