@@ -34,11 +34,20 @@ class DatabaseManager:
 
         self.query(query)
 
-    def select(self, table_name, columns=None, limit=None):
+    def select(self, table_name, columns=None, sort_by=None, limit=None):
         columns = ", ".join(columns) if columns is not None else "*"
-        limit = f" limit {limit}" if limit is not None else ""
-        query = (
-            f"select {columns} from {table_name}"
-            f"{limit};"
-        )
+        query = f"select {columns} from {table_name}"
+
+        if sort_by is not None:
+            if sort_by.startswith("-"):
+                sort_by = sort_by.replace("-", '')
+                sort_order = "desc"
+            else:
+                sort_order = "asc"
+            query += f" order by {sort_by} {sort_order}"
+
+        if limit is not None:
+            query += f" limit {limit}"
+
+        query += ";"
         return self.query(query).fetchall()

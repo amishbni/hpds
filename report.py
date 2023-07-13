@@ -34,7 +34,7 @@ class RamUsage:
         )
 
     def get_ram_stats(self, limit=DEFAULT_LIMIT):
-        result = self.db.select(self.db_name, limit=limit)
+        result = self.db.select(self.db_name, sort_by="-created", limit=limit)
         return result
 
 
