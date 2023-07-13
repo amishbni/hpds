@@ -6,3 +6,4 @@ class RamUsage(BaseModel):
     used: int
     free: int
     total: int
+    created: str

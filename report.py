@@ -20,6 +20,7 @@ class RamUsage:
                 "used integer not null",
                 "free integer not null",
                 "total integer not null",
+                "created datetime default current_timestamp",
             ]
         )
 

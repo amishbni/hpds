@@ -56,6 +56,7 @@ async def ram_usage(
                 "used": stat[1],
                 "free": stat[2],
                 "total": stat[3],
+                "created": stat[4],
             }
         ) for stat in stats
     ]
