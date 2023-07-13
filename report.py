@@ -22,7 +22,7 @@ class RamUsage:
             ]
         )
 
-    def report_ram_stats(self):
+    def set_ram_stats(self):
         ram = psutil.virtual_memory()
 
         self.db.insert(
@@ -30,6 +30,10 @@ class RamUsage:
             ["used", "free", "total"],
             [ram.used, ram.free, ram.total],
         )
+
+    def get_ram_stats(self):
+        result = self.db.select(self.db_name)
+        return result
 
 
 ram_usage_instance = RamUsage()
